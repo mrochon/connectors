@@ -1,0 +1,47 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Azure AD OAuth2 client
+  description: Get AAD tokens.
+  contact: {name: Marius Rochon, url: 'https://www.mrochon.io/contact', email: mrochon@microsoft.com}
+host: login.microsoftonline.com
+basePath: /
+schemes: [https]
+consumes: [application/x-www-form-urlencoded]
+produces: [application/json]
+paths:
+  /{tenantId}/oauth2/v2.0/token:
+    post:
+      summary: Get app token
+      description: Get app token.
+      operationId: GetAppToken
+      parameters:
+      - {name: tenantId, in: path, required: true, type: string, description: Enter
+          the Tenant ID or name, x-ms-visibility: important}
+      - name: body
+        in: body
+        required: false
+        schema:
+          type: object
+          properties:
+            client_id: {type: string, description: Client Id, title: Client id, x-ms-visibility: important}
+            client_secret: {type: string, description: Client Secret, title: Secret,
+              x-ms-visibility: important}
+            scope: {type: string, description: Scope, title: Scope, x-ms-visibility: important}
+            grant_type: {type: string, description: Grant type, title: Client id,
+              x-ms-visibility: important, default: client_credentials}
+          required: [client_id, client_secret, scope]
+          x-ms-visibility: important
+        x-ms-visibility: important
+      responses:
+        '201':
+          description: '201'
+          schema: {$ref: '#/definitions/Authentication_Response'}
+definitions:
+  Authentication_Response:
+    type: object
+    properties:
+      access_token: {description: Access token, type: string, x-ms-summary: Access
+          token}
+      expires_in: {description: Token expires in secs, type: integer, x-ms-summary: expiresIn}
+securityDefinitions: {}

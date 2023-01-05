@@ -1,0 +1,44 @@
+https://make.preview.powerapps.com/
+
+app Id: fe06179d-56e5-4d13-ab24-0bd18846d154
+Tenant: 
+secret: 6My8Q~3FO6iHELR4-2gfwOlayxYJcvErNzOLtdtD
+scope: https://graph.microsoft.com/.default
+
+{
+"token_type":"Bearer",
+"expires_in":3599,
+"ext_expires_in":3599,
+"access_token":"string"
+}
+
+{
+"tenantId": "string",
+"clientId": "string",
+"secret": "string",
+"apiUri": "string"
+}
+
+        var contentAsString = await this.Context.Request.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var contentAsJson = JObject.Parse(contentAsString);
+        var tenantId = (string)contentAsJson["tenantId"];    
+        var clientId = (string)contentAsJson["clientId"];  
+        var secret = (string)contentAsJson["secret"]; 
+        var apiId = (string)contentAsJson["apiId"]; 
+        var scopes = $"{apiId}/.default";        
+        var url = $"https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/token";
+        var body = $"client_id={clientId}&client_secret={secret}&scope={scopes}&grant_type=client_credentials";
+        var request = new HttpRequestMessage(HttpMethod.Post, url)
+        {
+            Content = new StringContent(body, Encoding.UTF8, "application/x-www-form-urlencoded")
+        }; 
+        var resp = await SendAsync(request, CancellationToken);
+        return new HttpResponseMessage()
+        {
+            Content = await.resp.Content.ReadAsStringAsync();
+        }
+
+
+Content-type: application/x-www-form-urlencoded
+Accept: application/json
+Content-length: 140
